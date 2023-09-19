@@ -1,5 +1,5 @@
 # FoundryHelper
- a helper tool for foundry framework for smart contract dev.
+ a helper tool for smart contract dev with foundry framework.
 
 
  ## how to use
