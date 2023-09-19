@@ -1,0 +1,13 @@
+{
+    "rpc_end_points": [
+        {
+            "name": "mainnet",
+            "url": "https://eth-mainnet.g.alchemy.com/v2/XXXXXXXXXXXXXX"
+        },
+        {
+            "name": "bsc",
+            "url": "https://rpc.ankr.com/bsc/XXXXXXXXXXXXXXXXXXXX"
+        }
+    ],
+    "default_ide": "/usr/local/bin/cursor"
+}
