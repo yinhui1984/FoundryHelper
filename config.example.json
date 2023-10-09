@@ -9,5 +9,16 @@
             "url": "https://rpc.ankr.com/bsc/XXXXXXXXXXXXXXXXXXXX"
         }
     ],
-    "default_ide": "/usr/local/bin/cursor"
+    "install_cmds": [
+        {
+            "title": "openzeppelin-contracts",
+            "cmd": "forge install OpenZeppelin/openzeppelin-contracts --no-commit"
+        },
+        {
+            "title": "openzeppelin-contracts-upgradeable",
+            "cmd": "forge install OpenZeppelin/openzeppelin-contracts-upgradeable --no-commit"
+        }
+    ],
+    "default_ide": "/usr/local/bin/cursor",
+    "default_shell": "/usr/local/bin/bash"
 }

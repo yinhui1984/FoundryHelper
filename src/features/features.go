@@ -1,6 +1,7 @@
 package features
 
 import (
+	install "foundryhelper/src/features/install"
 	new_project "foundryhelper/src/features/new_project"
 )
 
@@ -17,6 +18,7 @@ func init() {
 
 func InitFeatures() {
 	featuresList = append(featuresList, new_project.NewProject{FeatureName: "创建新项目"})
+	featuresList = append(featuresList, install.Install{FeatureName: "安装第三方包"})
 }
 
 func GetAllFeatures() []Feature {

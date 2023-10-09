@@ -52,7 +52,7 @@ func createNewProject(rpcEndpoint configration.RpcEndPoint) {
 
 	utils.LogInfo("copy template from ", templateDir, " to ", targetDir)
 
-	if utils.IsFolderExist(targetDir) &&
+	if utils.IsFolderOrFileExist(targetDir) &&
 		!utils.AskForYes("Target directory already exist, overwrite it?") {
 		return
 	}
@@ -74,7 +74,7 @@ func createNewProject(rpcEndpoint configration.RpcEndPoint) {
 		return
 	}
 
-	out, err = utils.RunCommandLine2("cd " + targetDir + " && forge test -vvv")
+	out, err = utils.RunCommandLine2(configration.AppConfigInstance.DefaultShell, "cd "+targetDir+" && forge test -vvv")
 	if err != nil {
 		utils.LogError("Forge test failed: ", err, out)
 		return

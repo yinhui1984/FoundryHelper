@@ -11,10 +11,17 @@ type RpcEndPoint struct {
 	Url  string `json:"url"`
 }
 
+type InstallCommandLine struct {
+	Title   string `json:"title"`
+	Command string `json:"cmd"`
+}
+
 type Configration struct {
-	RpcEndPoints []RpcEndPoint `json:"rpc_end_points"`
-	ResourceDir  string        `json:"-"`
-	DefaultIDE   string        `json:"default_ide"`
+	RpcEndPoints []RpcEndPoint        `json:"rpc_end_points"`
+	InstallCmds  []InstallCommandLine `json:"install_cmds"`
+	ResourceDir  string               `json:"-"`
+	DefaultIDE   string               `json:"default_ide"`
+	DefaultShell string               `json:"default_shell"`
 }
 
 var AppConfigInstance Configration = Configration{}

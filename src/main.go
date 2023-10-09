@@ -48,4 +48,6 @@ func main() {
 		f := allFeatures[index]
 		f.Invoke()
 	}
+
+	utils.LogInfo("Bye!")
 }

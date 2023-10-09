@@ -10,6 +10,8 @@ import (
 	"regexp"
 	"strings"
 	"syscall"
+
+	"github.com/fsnotify/fsnotify"
 )
 
 func LoadJSONConfig(path string, v interface{}) error {
@@ -108,9 +110,17 @@ func ReplaceFirstInFile(regexPattern string, newString string, filePath string) 
 	return nil
 }
 
-func IsFolderExist(folderPath string) bool {
+func IsFolderOrFileExist(folderPath string) bool {
 	_, err := os.Stat(folderPath)
 	return err == nil
+}
+
+func IsFoundryProjectFolder(folderPath string) bool {
+	return IsFolderOrFileExist(folderPath) && IsFolderOrFileExist(filepath.Join(folderPath, "foundry.toml"))
+}
+
+func IsGitProjectFolder(folderPath string) bool {
+	return IsFolderOrFileExist(filepath.Join(folderPath, ".git"))
 }
 
 func AskForYes(title string) bool {
@@ -119,4 +129,67 @@ func AskForYes(title string) bool {
 	fmt.Scanln(&input)
 	input = strings.ToUpper(input)
 	return (input != "N" && input != "NO")
+}
+
+// 监视文件夹变化，当文件夹中的文件发生变化时，打印出变化的文件名
+func WatchFolder(folderPath string, stopCh <-chan struct{}) {
+	go watchFolder(folderPath, stopCh)
+}
+
+func watchFolder(folderPath string, stopCh <-chan struct{}) {
+	watcher, err := fsnotify.NewWatcher()
+	if err != nil {
+		LogError("error creating watcher: ", err)
+		return
+	}
+	defer watcher.Close()
+
+	go func() {
+		for {
+			select {
+			case event, ok := <-watcher.Events:
+				if !ok {
+					return
+				}
+				if event.Op&fsnotify.Create == fsnotify.Create {
+					fmt.Printf("Created file: %s\n", event.Name)
+					if fi, err := os.Stat(event.Name); err == nil && fi.IsDir() {
+						if err := watcher.Add(event.Name); err != nil {
+							LogError("error adding created directory %s to watcher: %v", event.Name, err)
+						}
+					}
+				} else if event.Op&fsnotify.Write == fsnotify.Write {
+					fmt.Printf("Modified file: %s\n", event.Name)
+				} else if event.Op&fsnotify.Remove == fsnotify.Remove {
+					fmt.Printf("Removed file: %s\n", event.Name)
+				} else if event.Op&fsnotify.Rename == fsnotify.Rename {
+					fmt.Printf("Renamed file: %s\n", event.Name)
+				}
+			case err, ok := <-watcher.Errors:
+				if !ok {
+					return
+				}
+				LogError("error watching: %v", err)
+			case <-stopCh:
+				return
+			}
+		}
+	}()
+
+	if err := filepath.Walk(folderPath, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			LogError("error accessing path %s: %v", path, err)
+			return err
+		}
+		if info.IsDir() {
+			if err := watcher.Add(path); err != nil {
+				LogError("error adding path %s to watcher: %v", path, err)
+			}
+		}
+		return nil
+	}); err != nil {
+		LogError("error walking the path %v: %v", folderPath, err)
+	}
+
+	<-stopCh
 }
