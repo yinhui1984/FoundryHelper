@@ -6,4 +6,4 @@ libs = ['lib']
 [rpc_endpoints]
 theNet="XXX"
 
-# See more config options https://github.com/foundry-rs/foundry/tree/master/config
+# See more config options https://book.getfoundry.sh/reference/config/

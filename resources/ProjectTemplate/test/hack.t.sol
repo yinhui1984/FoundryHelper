@@ -2,6 +2,7 @@
 pragma solidity ^0.8.10;
 
 import "forge-std/Test.sol";
+import "/Users/z/Documents/x/interface/interface.sol";
 
 contract Hack is Test {
     function setUp() public {
