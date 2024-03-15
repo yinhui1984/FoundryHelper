@@ -70,4 +70,13 @@ func (n Install) Invoke() {
 	} else {
 		utils.LogOK("Run install command success: ", cmd.Command)
 	}
+
+	//remapping
+	err = utils.RunCommandLine3(configration.AppConfigInstance.DefaultShell, "forge remappings > remappings.txt")
+	if err != nil {
+		utils.LogError("Run install command failed: ", err)
+		return
+	} else {
+		utils.LogOK("Run install command success: ", cmd.Command)
+	}
 }
