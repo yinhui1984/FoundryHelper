@@ -74,7 +74,7 @@ func createNewProject(rpcEndpoint configration.RpcEndPoint) {
 		return
 	}
 
-	out, err = utils.RunCommandLine2(configration.AppConfigInstance.DefaultShell, "cd "+targetDir+" && forge test -vvv")
+	out, err = utils.RunCommandLine2(configration.AppConfigInstance.DefaultShell, "cd "+targetDir+" && ./test.sh")
 	if err != nil {
 		utils.LogError("Forge test failed: ", err, out)
 		return
