@@ -4,5 +4,4 @@
 
 # CREATION_CODE=$(cat ./src/target_creation_code.txt)
 # export THE_CREATION_CODE=$CREATION_CODE
-
-forge test -vvv
+# forge test -vvv

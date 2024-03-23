@@ -18,9 +18,9 @@ contract TargetHandler is CommonBase, StdCheats, StdUtils {
 
     receive() external payable {}
 
-        function toFallback(uint256 amount) external payable {
-        amount=bound(amount, 0, address(this).balance);
-        (bool ok,)=address(target).call{value: amount}("");
+    function toFallback(uint256 amount) external payable {
+        amount = bound(amount, 0, address(this).balance);
+        (bool ok,) = address(target).call{value: amount}("");
         require(ok, "send value failed");
     }
 }
